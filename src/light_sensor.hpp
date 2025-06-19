@@ -17,7 +17,6 @@ namespace fastsim
       _color(color), _angle(angle), _range(range),
       _activated(false), _num(0), _distance(-1)
     {
-      //      std::cout<<"angle="<<angle<<" range="<<range<<std::endl;
     }
     int update(const Posture& pos,
 	       const std::shared_ptr<Map>& map);

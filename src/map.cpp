@@ -21,22 +21,30 @@
 */
 
 #include <iostream>
+#include <cstdlib>   // for std::getenv
 #include "map.hpp"
 
 namespace fastsim
 {
-  void Map::_read_file(const std::string& fname)
-  {
-    std::string str, check;
-    std::ifstream ifs(fname.c_str());
+  void Map::_read_file(const std::string& fname) {
+  std::string expanded_fname = fname;
+  std::string str, check;
+  if (!fname.empty() && fname[0] == '$') {
+    std::size_t slash_pos = fname.find('/');
+    if (slash_pos != std::string::npos) {
+      std::string var_name = fname.substr(1, slash_pos - 1);
+      if (const char* var_val = std::getenv(var_name.c_str())) {
+        expanded_fname = std::string(var_val) + fname.substr(slash_pos);
+      }
+    }
+  }
+    std::ifstream ifs(expanded_fname.c_str());
     if (!ifs.good())
-      throw Exception(std::string("cannot open map :") + fname);
+      throw Exception(std::string("cannot open map :") + expanded_fname);
     ifs >> str >> check;
-    // If there is a # means we have a header, ignore it
     if (check == "#")
     {
       char c = ' ';
-      // usually they put a new line
       while (c != '\n')
         ifs.read(&c, 1);
     }

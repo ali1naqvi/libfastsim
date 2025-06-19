@@ -1,11 +1,12 @@
 #include "fastsim.hpp"
+#include <iostream>
 
 namespace fastsim {
   Settings::Settings(const std::string& config_file) {
     using boost::property_tree::ptree;
     ptree pt;
     read_xml(config_file, pt);
-        
+    
     ptree &n_map = pt.get_child("fastsim.map");
     _map = std::shared_ptr<Map>
       (new Map(_get_a<std::string>(n_map, "name").c_str(),
@@ -20,7 +21,6 @@ namespace fastsim {
 
     ptree& n_display = pt.get_child("fastsim.display");
     _display = _get_a_bool(n_display, "enable");
-    //std::cout<<"display=" << _display << std::endl;
 
     BOOST_FOREACH(ptree::value_type &v, pt.get_child("fastsim")) {
       if (v.first == "goal")
@@ -58,5 +58,6 @@ namespace fastsim {
 		       _get_a<float>(v.second, "angle") / 180 * M_PI,
 		       _get_a<float>(v.second, "angular_range") / 180 * M_PI));
     }
+
   }
 }
