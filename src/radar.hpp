@@ -12,7 +12,7 @@ namespace fastsim
   class Radar
   {
   public:
-    Radar(int color, int nb_slices, bool through_walls = false) :
+    Radar(int color, int nb_slices, bool through_walls = true) :
       _color(color), _nb_slices(nb_slices), _inc(2 * M_PI / nb_slices),
       _activated_slice(0),
       _through_walls(through_walls)
